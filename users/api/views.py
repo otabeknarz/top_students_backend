@@ -98,4 +98,4 @@ def invite_user(request, invitation_token, user_id):
 
     invitation.invited_users.add(user)
     invitation.save()
-    return Response({"user_id": invitation.user.id, "count": invitation.invited_users.count()}, status=status.HTTP_200_OK)
+    return Response({"user_id": invitation.user.id, "count": invitation.invited_users.filter(has_successfully_registered=True).count()}, status=status.HTTP_200_OK)
