@@ -61,14 +61,15 @@ def get_or_create_invitation(request, user_id):
     user.has_successfully_registered = True
     user.save()
     invitation_count = None
+    user_who_invite = None
     if user.invited_by.count() != 0:
         user_who_invite = [u for u in user.invited_by.all()][0]
         invitation_count = user_who_invite.invitation.count()
     invitation = Invitation.objects.filter(user=user).first()
     if not invitation:
         new_invitation = Invitation.objects.create(user=user)
-        return Response({"token": new_invitation.token, "count": invitation_count}, status=status.HTTP_201_CREATED)
-    return Response({"token": invitation.token, "count": invitation_count}, status=status.HTTP_200_OK)
+        return Response({"token": new_invitation.token, "count": invitation_count, "user_id": user_who_invite.id if user_who_invite else None}, status=status.HTTP_201_CREATED)
+    return Response({"token": invitation.token, "count": invitation_count, "user_id": user_who_invite.id if user_who_invite else None}, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
