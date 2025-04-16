@@ -91,9 +91,12 @@ def add_invitation(request, user_id, being_invited_user_id):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def invite_user(request, invitation_token, user_id):
-    invitation = Invitation.objects.filter(token=invitation_token).first()
+    invitation = Invitation.objects.filter(token__lower=invitation_token.lower()).first()
     if not invitation:
-        return Response("Invitation not found", status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            f"Invitation not found your token is {invitation_token}",
+            status=status.HTTP_404_NOT_FOUND
+        )
     user = User.objects.filter(id=user_id).first()
     if not user:
         return Response("User not found", status=status.HTTP_404_NOT_FOUND)
