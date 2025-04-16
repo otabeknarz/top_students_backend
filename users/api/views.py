@@ -91,7 +91,7 @@ def add_invitation(request, user_id, being_invited_user_id):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def invite_user(request, invitation_token, user_id):
-    invitation = Invitation.objects.filter(token__lower=invitation_token.lower()).first()
+    invitation = Invitation.objects.filter(token=invitation_token).first()
     if not invitation:
         return Response(
             f"Invitation not found your token is {invitation_token}",
