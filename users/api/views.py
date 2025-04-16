@@ -93,10 +93,10 @@ def add_invitation(request, user_id, being_invited_user_id):
 def invite_user(request, invitation_token, user_id):
     invitation = Invitation.objects.filter(token=invitation_token).first()
     if not invitation:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response("Invitation not found", status=status.HTTP_404_NOT_FOUND)
     user = User.objects.filter(id=user_id).first()
     if not user:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response("User not found", status=status.HTTP_404_NOT_FOUND)
 
     if user.invited_by.count() != 0:
         return Response(status=status.HTTP_403_FORBIDDEN)
