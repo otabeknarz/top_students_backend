@@ -26,6 +26,13 @@ class User(AbstractUser):
             self.username = self.id
         super(User, self).save(*args, **kwargs)
 
+    @classmethod
+    def get_invited_users(self):
+        invitation = Invitation.objects.filter(user=self).first()
+        if not invitation:
+            return
+        return invitation.invited_users.filter(has_successfully_registered=True)
+
 
 class Invitation(models.Model):
     id = models.CharField(
