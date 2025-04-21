@@ -10,10 +10,10 @@ from users.models import User, Invitation
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def get_users(request):
-    user = User.get_invited_users()
-    if not user:
+    users = User.get_invited_users()
+    if len(users) == 0:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    serializer = UserSerializer(user, many=True)
+    serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
 

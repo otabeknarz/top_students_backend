@@ -26,12 +26,18 @@ class User(AbstractUser):
             self.username = self.id
         super(User, self).save(*args, **kwargs)
 
-    @classmethod
-    def get_invited_users(self):
-        invitation = Invitation.objects.filter(user=self).first()
-        if not invitation:
-            return
-        return invitation.invited_users.filter(has_successfully_registered=True)
+    @staticmethod
+    def get_invited_users():
+        invitations = Invitation.objects.all()
+        users = []
+        for invitation in invitations:
+            count = 0
+            for invited_user in invitation.invited_users.all():
+                if invited_user.has_successfully_registered:
+                    count += 1
+            if count > 3:
+                users.append(invitation.user)
+        return users
 
 
 class Invitation(models.Model):
