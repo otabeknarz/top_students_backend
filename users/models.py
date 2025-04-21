@@ -35,7 +35,7 @@ class User(AbstractUser):
             for invited_user in invitation.invited_users.all():
                 if invited_user.has_successfully_registered:
                     count += 1
-            if count > 3:
+            if count == 3:
                 users.append(invitation.user)
         return users
 
